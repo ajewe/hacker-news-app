@@ -39,7 +39,7 @@ class App extends React.Component {
       }
     )))
     .then(searchHits => this.setState({
-      searchHits,
+      searchHits: searchHits
     }))
     .catch(error => console.log('parsing failed', error))
   }
@@ -50,25 +50,20 @@ class App extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    this.setState ({    
+      searchInput: '',
+      searchCriteria: 'author',
+      submitClicked: true,
+    })
+
     if (this.state.searchCriteria === 'author') {
       this.fetchByAuthor(this.state.searchInput)
-      this.setState ({    
-        searchInput: '',
-        searchCriteria: 'author',
-        submitClicked: true,
-      })
     } else {
       this.fetchByStory(this.state.searchInput)
-      this.setState ({    
-        searchInput: '',
-        searchCriteria: 'author',
-        submitClicked: true,
-      })
     }
   }
 
   render() {
-
     return (
       <div className="App">
         <h1>Hacker News</h1>
@@ -88,7 +83,7 @@ class App extends React.Component {
         </form>
         <div>
           {this.state.submitClicked && 
-            <h1 style={{textAlign: "left"}}>Results:</h1>
+            <h1 style={{textAlign: "left", margin: "20px"}}>Results:</h1>
           }
           {this.state.searchHits.map((item, index) => {
             return (<StoryItem 
@@ -112,7 +107,7 @@ function StoryItem(props) {
       <h2>Title: {props.title}</h2>
       <h3>Author: {props.author}</h3>
       <h3>Date: {props.date}</h3>
-      <p>url: {props.url}</p>
+      <a href={props.url}>{props.url}</a>
     </div>
   )
 }
